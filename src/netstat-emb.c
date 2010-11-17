@@ -129,7 +129,6 @@ struct netstat **get_socket_info(char *socket_file, int *struct_size)
 				count = 0;
 				goto end;
 			}
-			memset(net_info+(sizeof(struct netstat *) * (count+1)), 0, sizeof(struct netstat *));
 
 			/* Allocate some memory for the netstat structure */
 			net_info[count] = malloc(sizeof(struct netstat));
@@ -337,7 +336,6 @@ char *parse_socket_string(char *socket_string, uint16_t *port)
 
 	/* Convert port number */
 	*port = (uint16_t) strtol(port_ptr, NULL, 16);
-
 end:
 	if(ip_ptr) free(ip_ptr);
 	return ip;
