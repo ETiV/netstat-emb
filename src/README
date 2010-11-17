@@ -1,0 +1,44 @@
+DESCRIPTION
+
+	Netstat-EMB is a simple netstat intended primarily for use on embedded Linux systems that may be running
+	a crippled version of netstat, or which do not include netstat at all.
+
+	Netstat-EMB provides the following features:
+
+		o Support for TCP, UCP and IPv6 sockets
+		o Displays the local and remote IP and port numbers for each open socket
+		o Corrolates each network socket with its associated process ID and the process file path
+
+	This information is particularly useful when reverse engineering and analyzing live systems.
+
+USAGE
+
+	By default, Netstat-EMB will display all TCP and UDP IPv4 sockets:
+
+		# ./netstat-emb
+
+	To display IPv6 sockets, use the -6 switch:
+
+		# ./netstat-emb -6
+
+LICENSE
+
+	Copyright (c) 2010 Craig Heffner
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
