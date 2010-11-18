@@ -53,13 +53,19 @@ void print_socket_info(char *label, char *type)
                 printf("\t%-18s\t%d\t", netstat[i]->remote_ip, netstat[i]->remote_port);
 	
 		/* Print the current socket state */
-                if(netstat[i]->state == STATE_LISTEN)
+                switch(netstat[i]->state)
                 {
-                        printf("\tLISTEN     ");
-                } else if(netstat[i]->state == STATE_ESTABLISHED) {
-                        printf("\tESTABLISHED");
-                } else {
-                        printf("\tUNKNOWN    ");
+			case STATE_LISTEN:
+                        	printf("\tLISTEN     ");
+				break;
+			case STATE_TIME_WAIT:
+				printf("\tTIME_WAIT  ");
+				break;
+			case STATE_ESTABLISHED:
+				printf("\tESTABLISHED");
+				break;
+			default:
+                        	printf("\tUNKNOWN    ");
                 }
 
 		/* Print the owner's PID and file path */

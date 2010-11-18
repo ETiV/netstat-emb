@@ -12,6 +12,7 @@
 #define IPV6_HEX_STR_LEN	32
 #define MAX_SOCKET_SIZE		256
 #define STATE_ESTABLISHED	0x01
+#define STATE_TIME_WAIT		0x06
 #define STATE_LISTEN		0x0A
 #define IPV4_COLUMN_HEADERS	"Proto\tLocal Address\t\tLocal Port\tRemote Address\t\tRemote Port\tState\t\tPID\t\tProcess Path"
 #define IPV6_COLUMN_HEADERS	"Proto\tLocal Address\t\t\t\tLocal Port\tRemote Address\t\t\t\tRemote Port\tState\t\tPID\t\tProcess Path"
