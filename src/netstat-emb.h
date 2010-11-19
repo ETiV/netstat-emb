@@ -5,6 +5,8 @@
 #define TCP6			"/proc/net/tcp6"
 #define UDP			"/proc/net/udp"
 #define UDP6			"/proc/net/udp6"
+#define BIG			1
+#define LITTLE			0
 #define READ_SIZE		1
 #define LINE_DELIMITER		'\n'
 #define COLON			':'
@@ -41,3 +43,4 @@ char *format_ipv6(char *raw_v6);
 char *link_info(char *link_file);
 char *get_column(char *row, int colnum);
 int is_numeric_string(char *string);
+uint32_t byteswap32(uint32_t byte);
