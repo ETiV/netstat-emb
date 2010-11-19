@@ -153,13 +153,12 @@ struct netstat **get_socket_info(char *socket_file, int *struct_size)
 			net_info[count]->inode = atoi(inode_str);
 			net_info[count]->local_port = local_port;
 			net_info[count]->remote_port = remote_port;
-			net_info[count]->state = strtol(state_str, NULL, 16);
+			net_info[count]->state = strtoul(state_str, NULL, 16);
 
 			/* Increment the structure counter */
 			count++;
 		} else {
 			fprintf(stderr, "ERROR: Failed to parse socket entry in %s\n", socket_file);
-			continue;
 		}
 
 		if(local_str) free(local_str);
@@ -337,17 +336,17 @@ char *parse_socket_string(char *socket_string, uint16_t *port)
 	{
 		ip = format_ipv6(ip_ptr);
 	} else {
-		ip = dotted_decimal((uint32_t) strtol(ip_ptr, NULL, 16));
+		ip = dotted_decimal((uint32_t) strtoul(ip_ptr, NULL, 16));
 	}
 
 	/* Convert port number */
-	*port = (uint16_t) strtol(port_ptr, NULL, 16);
+	*port = (uint16_t) strtoul(port_ptr, NULL, 16);
 end:
 	if(ip_ptr) free(ip_ptr);
 	return ip;
 }
 
-/* Converts a 32 bit network byte order value into a dotted decimal IP address string */
+/* Converts a 32 bit little endian byte order value into a dotted decimal IP address string */
 char *dotted_decimal(uint32_t ip)
 {
 	char *dotted_decimal = NULL;
@@ -355,6 +354,14 @@ char *dotted_decimal(uint32_t ip)
 	dotted_decimal = malloc(IPV4_STR_LEN+1);
 	if(dotted_decimal)
 	{
+		/* Only byte-swap if the host system is big endian.
+		 * ENDIANESS is defined in the Makefile.
+		 */
+		if(ENDIANESS == BIG)
+		{
+			ip = byteswap32(ip);
+		}
+
 		memset(dotted_decimal, 0, IPV4_STR_LEN+1);
 		snprintf(dotted_decimal, IPV4_STR_LEN, "%d.%d.%d.%d", (ip & 0xFF), ((ip >> 8) & 0xFF), ((ip >> 16) & 0xFF), (ip >> 24));
 	} else {
@@ -471,6 +478,19 @@ char *get_column(char *row, int colnum)
         }
 
         return column;
+}
+
+/* Byte-swapps a 32-bit value */
+uint32_t byteswap32(uint32_t byte)
+{
+	uint32_t swap = 0;
+
+	swap = (byte >> 24);
+	swap += (((byte >> 16) & 0xFF) << 8);
+	swap += (((byte >> 8 ) & 0xFF) << 16);
+	swap += ((byte & 0xFF) << 24);
+
+	return swap;
 }
 
 /* Determines if all characters in a string are numeric 0-9 or not */
