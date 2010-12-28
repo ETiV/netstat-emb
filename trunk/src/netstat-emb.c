@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include "netstat-emb.h"
+#include "config.h"
 
 int main(int argc, char *argv[])
 {
@@ -68,13 +69,14 @@ void print_socket_info(char *label, char *type)
                         	printf("\tUNKNOWN    ");
                 }
 
-		/* Print the owner's PID and file path */
-                printf("\t%-8d\t%s\n", netstat[i]->pid, netstat[i]->path);
+		/* Print the owner's PID, file path, and command line arguments */
+                printf("\t%-8d\t%s %s\n", netstat[i]->pid, netstat[i]->path, netstat[i]->arguments);
         
 		/* Free up malloced strings */
                 if(netstat[i]->local_ip) free(netstat[i]->local_ip);
                 if(netstat[i]->remote_ip) free(netstat[i]->remote_ip);
 		if(netstat[i]->path) free(netstat[i]->path);
+		if(netstat[i]->arguments) free(netstat[i]->arguments);
 		free(netstat[i]);
         }
 
@@ -244,6 +246,7 @@ void resolve_socket_owners(struct netstat **socket_info, int socket_info_size)
 							/* Populate the owner's PID and full executable path */
 							socket_info[i]->pid = atoi(proc_dir_info->d_name);
 							socket_info[i]->path = link_info((char *) &exe_path);
+							socket_info[i]->arguments = get_cmdline_args(socket_info[i]->pid);
 							break;
 						}
 					}
@@ -259,6 +262,58 @@ void resolve_socket_owners(struct netstat **socket_info, int socket_info_size)
 end:
 	if(proc_dir) closedir(proc_dir);
 	return;
+}
+
+/* Prases and formats the command line arguments for each process */
+char *get_cmdline_args(int pid)
+{
+	char cmdline_file[FILENAME_MAX] = { 0 };
+	char *cmdline = NULL, *args = NULL;
+	int i = 0, cmdline_size = 0, args_offset = 0;
+
+	/* Format the path to the cmdline file */
+	snprintf((char *) &cmdline_file, FILENAME_MAX, "%s/%d/%s", PROC, pid, CMDLINE);
+
+	/* Read in the cmdline file */
+	cmdline = read_file((char *) cmdline_file, &cmdline_size);
+	
+	/* Loop through the cmdline file contents, replacing null bytes with spaces.
+	 * Loop while i < cmdline_size-1, as the last byte is a null byte and we want
+	 * the resulting string to be properly null terminated.
+	 */
+	for(i=0; i<cmdline_size-1; i++)
+	{
+		if(cmdline[i] == 0x00)
+		{
+			/* The first null byte delimits the command from its arguments.
+			 * We don't care about this null byte, so mark i+1 as the start
+			 * of the arguments and continue to the next loop.
+			 */
+			if(!args_offset)
+			{
+				args_offset = i+1;
+				continue;
+			}
+
+			/* Once a null byte is found, replace it with a space */
+			memset(cmdline+i, ' ', 1);
+		}
+	}
+
+	/* If we found an offset to some command line arguments, strdup them.
+	 * Else, strdup a zero-length string. If this is not done and there are
+	 * no arguments, then when the arguments are printed they will be displayed
+	 * as '(null)'.
+	 */
+	if(args_offset)
+	{
+		args = strdup(cmdline+args_offset);
+	} else {
+		args = strdup("");
+	}
+
+	if(cmdline) free(cmdline);
+	return args;
 }
 
 /* Reads in a file of unknown length. Return buffer is not guarunteed to be null terminated */

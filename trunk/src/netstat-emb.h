@@ -1,12 +1,11 @@
 #include <stdint.h>
 
 #define PROC			"/proc"
+#define CMDLINE			"cmdline"
 #define TCP			"/proc/net/tcp"
 #define TCP6			"/proc/net/tcp6"
 #define UDP			"/proc/net/udp"
 #define UDP6			"/proc/net/udp6"
-#define BIG			1
-#define LITTLE			0
 #define READ_SIZE		1
 #define LINE_DELIMITER		'\n'
 #define COLON			':'
@@ -31,10 +30,12 @@ struct netstat
 	int pid;
 	int state;
 	char *path;
+	char *arguments;
 };
 
 void print_socket_info(char *label, char *type);
 struct netstat **get_socket_info(char *socket_file, int *struct_size);
+char *get_cmdline_args(int pid);
 char *read_file(char *file_name, int *file_size);
 char *parse_socket_string(char *socket_string, uint16_t *port);
 void resolve_socket_owners(struct netstat **socket_info, int socket_info_size);
