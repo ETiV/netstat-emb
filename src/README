@@ -1,15 +1,30 @@
 DESCRIPTION
 
 	Netstat-EMB is a simple netstat intended primarily for use on embedded Linux systems that may be running
-	a crippled version of netstat, or which do not include netstat at all.
+	a crippled version of netstat, or do not include netstat at all.
 
 	Netstat-EMB provides the following features:
 
 		o Support for TCP, UCP and IPv6 sockets
 		o Displays the local and remote IP and port numbers for each open socket
 		o Corrolates each network socket with its associated process ID and the process file path
+		o Displays the command line arguments, if any, passed to the process at run time
 
 	This information is particularly useful when reverse engineering and analyzing live systems.
+
+BUILDING
+	
+	To build:
+	
+		$ ./configure CC=armeb-linux-unknown-gcc
+		$ make
+	
+	Be sure to specify the correct cross-compiler when running the configure script. The configure
+	script will attempt to auto-detect if the target is big or little endian. In the event that this
+	guess is incorrect, it may be specified explicitly:
+
+		$ ./configure ENDIANESS=le
+		$ ./configure ENDIANESS=be
 
 USAGE
 

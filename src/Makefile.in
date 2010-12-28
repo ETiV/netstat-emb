@@ -1,4 +1,4 @@
-CC=gcc
+CC=@CC@
 OPTS=-Wall -static
 TARGET=netstat-emb
 
