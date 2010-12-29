@@ -1,6 +1,6 @@
 DESCRIPTION
 
-	Netstat-EMB is a simple netstat intended primarily for use on embedded Linux systems that may be running
+	Netstat-EMB is a simple netstat tool intended primarily for use on embedded Linux systems that implement
 	a crippled version of netstat, or do not include netstat at all.
 
 	Netstat-EMB provides the following features:
@@ -16,15 +16,15 @@ BUILDING
 	
 	To build:
 	
-		$ ./configure CC=armeb-linux-unknown-gcc
+		$ ./configure CC=armeb-linux-unknown-gcc --host=armeb
 		$ make
 	
 	Be sure to specify the correct cross-compiler when running the configure script. The configure
 	script will attempt to auto-detect if the target is big or little endian. In the event that this
 	guess is incorrect, it may be specified explicitly:
 
-		$ ./configure ENDIANESS=le
-		$ ./configure ENDIANESS=be
+		$ ./configure CC=mipsel-linux-unknown-gcc --host=mipsel ENDIANESS=le
+		$ ./configure CC=armeb-linux-unknown-gcc --host=armeb ENDIANESS=be
 
 USAGE
 

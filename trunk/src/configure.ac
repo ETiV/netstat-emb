@@ -8,7 +8,7 @@ AC_DEFINE([BIG], [1])
 
 if test "$ENDIANESS" == ""
 then
-	if [ basename $CC | grep -e armeb -e mipseb ]
+	if test "$host_alias" == "armeb" || test "$host_alias" == "mips" || test "$host_alias" == "powerpc"
 	then
 		echo "auto detected big endian target architecture"
 		ENDIANESS=be
