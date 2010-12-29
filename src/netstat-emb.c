@@ -49,6 +49,16 @@ void print_socket_info(char *label, char *type)
         {
 		printf("%s\t", label);
 
+		/* This "prettifies" the output and prevents '(null)' from being printed by printf */
+		if(netstat[i]->path == NULL)
+		{
+			netstat[i]->path = strdup(" ");
+		}
+		if(netstat[i]->arguments == NULL)
+		{
+			netstat[i]->arguments = strdup(" ");
+		}
+
 		/* Print local/remote ip/port */
                 printf("%-18s\t%d\t", netstat[i]->local_ip, netstat[i]->local_port);
                 printf("\t%-18s\t%d\t", netstat[i]->remote_ip, netstat[i]->remote_port);
@@ -57,6 +67,7 @@ void print_socket_info(char *label, char *type)
                 switch(netstat[i]->state)
                 {
 			case STATE_LISTEN:
+			case STATE_ALT_LISTEN:
                         	printf("\tLISTEN     ");
 				break;
 			case STATE_TIME_WAIT:
@@ -300,16 +311,9 @@ char *get_cmdline_args(int pid)
 		}
 	}
 
-	/* If we found an offset to some command line arguments, strdup them.
-	 * Else, strdup a zero-length string. If this is not done and there are
-	 * no arguments, then when the arguments are printed they will be displayed
-	 * as '(null)'.
-	 */
 	if(args_offset)
 	{
 		args = strdup(cmdline+args_offset);
-	} else {
-		args = strdup("");
 	}
 
 	if(cmdline) free(cmdline);

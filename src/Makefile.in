@@ -6,5 +6,8 @@ $(TARGET):
 	$(CC) $(TARGET).c -o $(TARGET)  $(OPTS)
 
 clean:
-	rm -rf config.* *.cache
+	rm -rf config.status config.log *.cache
 	rm -f $(TARGET)
+
+distclean: clean
+	rm -f config.h Makefile
