@@ -25,14 +25,12 @@ int main(int argc, char *argv[])
 		} else {
 			printf("Usage: %s [-6]\n", argv[0]);
 		}
-		goto end;
+	} else {
+		printf("%s\n%s\n", IPV4_COLUMN_HEADERS, IPV4_DELIM);
+		print_socket_info("tcp", TCP);
+		print_socket_info("udp", UDP);
 	}
 
-	printf("%s\n%s\n", IPV4_COLUMN_HEADERS, IPV4_DELIM);
-	print_socket_info("tcp", TCP);
-	print_socket_info("udp", UDP);
-
-end:
 	printf("\n");
 	return EXIT_SUCCESS;
 }
@@ -60,8 +58,8 @@ void print_socket_info(char *label, char *type)
 		}
 
 		/* Print local/remote ip/port */
-                printf("%-18s\t%d\t", netstat[i]->local_ip, netstat[i]->local_port);
-                printf("\t%-18s\t%d\t", netstat[i]->remote_ip, netstat[i]->remote_port);
+                printf("%s:%-5d\t", netstat[i]->local_ip, netstat[i]->local_port);
+                printf("\t%s:%-5d\t", netstat[i]->remote_ip, netstat[i]->remote_port);
 	
 		/* Print the current socket state */
                 switch(netstat[i]->state)
