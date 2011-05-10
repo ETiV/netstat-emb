@@ -16,10 +16,10 @@
 #define STATE_TIME_WAIT		0x06
 #define STATE_LISTEN		0x0A	/* TCP listen state */
 #define STATE_ALT_LISTEN	0x07	/* UDP listen state */
-#define IPV4_COLUMN_HEADERS	"Proto\tLocal Address\t\tLocal Port\tRemote Address\t\tRemote Port\tState\t\tPID\t\tProcess"
-#define IPV6_COLUMN_HEADERS	"Proto\tLocal Address\t\t\t\tLocal Port\tRemote Address\t\t\t\tRemote Port\tState\t\tPID\t\tProcess"
-#define IPV4_DELIM		"----------------------------------------------------------------------------------------------------------------------------------------------------"
-#define IPV6_DELIM		"--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+#define IPV4_COLUMN_HEADERS	"Proto\tLocal Address\t\tForeign Address\t\tState\t\tPID\t\tProcess"
+#define IPV6_COLUMN_HEADERS	"Proto\tLocal Address\t\t\t\t\t\tForeign Address\t\t\t\t\t\tState\t\tPID\t\tProcess"
+#define IPV4_DELIM		"-----------------------------------------------------------------------------------------------------------------------------------------------"
+#define IPV6_DELIM		"--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
 
 struct netstat
 {
